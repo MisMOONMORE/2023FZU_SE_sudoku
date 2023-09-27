@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title></title>
+    <link rel="icon" href="sudo.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="sudo.ico" type="image/x-icon" />
+    <style>
+        #canvassudo {
+        border:1px solid black;
+        width:400px;height:400px;
+        }
+
+    </style>
+</head>
+<body>
+    <table>
+        <tbody><tr>
+            <td>
+                <!--<canvas id="canvassudo" width="400" height="400"></canvas><br>-->
+                <div id="sudokus">
+                    <canvas id="sudoku1" width="400" height="400"></canvas>
+                    <canvas id="sudoku2" width="400" height="400"></canvas>
+                    <canvas id="sudoku3" width="400" height="400"></canvas>
+                    <canvas id="sudoku4" width="400" height="400"></canvas>
+                    <canvas id="sudoku5" width="400" height="400"></canvas>
+                    <canvas id="sudoku6" width="400" height="400"></canvas>
+                    <canvas id="sudoku7" width="400" height="400"></canvas>
+                    <canvas id="sudoku8" width="400" height="400"></canvas>
+                    <canvas id="sudoku9" width="400" height="400"></canvas>
+                </div>
+                难度：<select id="seleLevel">
+                    <option value="2">容易</option>
+                    <option value="3" selected="selected">一般</option>
+                    <option value="4">较难</option>
+                    <option value="5">困难</option>
+                </select>
+                
+                <button id="btnInitSudo" onclick="btnInitSudo_Click()">生成新数独</button>
+                <button id="btnEditMode" onclick="btnEditMode_Click()">编辑数独</button>
+                <button id="btnShowOptNumber" onclick="btnShowOptNumber_Click()">显示候选数</button>
+                <button id="btnClearAll" onclick="btnClearAll_Click()">全部清除</button>
+            </td>
+        </tr>
+    </tbody></table>
+    <script src="sudo.js"></script>
+    <script>
+    
+    var sudokus = document.getElementById("sudokus").children;
+
+    function btnInitSudo_Click() {
+        if (confirm("确认新开一局？")) {
+            /*var seleLevel = document.getElementById("seleLevel");
+            sudo.Init(seleLevel.value);
+            sudo.Draw();*/
+            for (var i = 0; i < 9; i++) {
+                var sudo = new Sudo(sudokus[i].width, sudokus[i].height, sudokus[i]);
+                var seleLevel = document.getElementById("seleLevel");
+                sudo.Init(seleLevel.value);
+                sudo.Draw();
+            }
+        }
+    }
+
+    function btnShowOptNumber_Click() {
+        var showopt = sudo.ToggleShowOptionNumber();
+
+        var btn = document.getElementById("btnShowOptNumber");
+        if (showopt)
+            btn.innerText = "隐藏候选数";
+        else
+            btn.innerText = "显示候选数";
+
+        sudo.Draw();
+       /*for (var i = 0; i < 9; i++) {
+        
+            
+            sudo.Draw();
+        }*/
+    }
+
+    function btnEditMode_Click() {
+        var editmode = sudo.ToggleEditMode();
+        var btn = document.getElementById("btnEditMode");
+        if (editmode)
+            btn.innerText = "结束编辑";
+        else
+            btn.innerText = "编辑模式";
+        sudo.Draw();
+        /*for (var i = 0; i < 9; i++) {
+            var editmode = sudo.ToggleEditMode();
+            var btn = document.getElementById("btnEditMode");
+            if (editmode)
+                btn.innerText = "结束编辑";
+            else
+                btn.innerText = "编辑模式";
+            
+            sudo.Draw();
+        }*/
+
+    }
+
+    function btnClearAll_Click() {
+        if (confirm("确认清除所有自填数字？")) {
+            //sudo.ClearAll();
+            //sudo.Draw();
+            for (var i = 0; i < 9; i++) {
+                
+                sudo.ClearAll();
+                sudo.Draw();
+            }
+        }
+    }
+
+
+    var ctx = [];
+    for(var i = 1; i <=9; i++)
+    {
+        ctx[i] = document.getElementById("sudoku"+i).getContext("2d");
+    }
+
+    for (var i = 0; i < 9; i++) {
+        var sudo = new Sudo(sudokus[i].width, sudokus[i].height, sudokus[i]);
+        var seleLevel = document.getElementById("seleLevel");
+        sudo.Init(seleLevel.value);
+        sudo.Draw();
+    }
+    
+    //var seleLevel = document.getElementById("seleLevel");
+    //sudo.Init(seleLevel.value);
+    //btnUseBuffer_Click();
+    //sudo.Draw();
+    </script>
+
+
+
+</body></html>
