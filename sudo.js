@@ -25,7 +25,7 @@ function Sudo(width, height, canvasGame) {
     this.ItemHeight = height / 9; // 每个格子的高
     this.ShowOptionNumber = false; //是否显示可选数字
     this.CanvasGame = canvasGame; // 保存本游戏的canvas
-    this.bUseBuffer = true;//双缓冲
+    this.bUseBuffer = true;
     this.EditingCellIndex = null; // 正在编辑状态的格子索引
     this.EditPannel = null; // 正在编辑状态时，指向编辑板实例。不在编辑状态时，指向null;
     
@@ -73,7 +73,11 @@ function Sudo(width, height, canvasGame) {
 
         this.CanvasGame.addEventListener('mousemove', onMouseMove, false);
         this.CanvasGame.addEventListener('mousedown', onMouseDown, false);
-        this.CanvasGame.addEventListener('mouseup', onMouseUp, false);
+        var that = this;
+        this.CanvasGame.addEventListener('mouseup', function(evt){
+            var loc = getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
+            that.ProcMouseClick(loc);
+        }, false);
 
     };
 
@@ -163,6 +167,9 @@ function Sudo(width, height, canvasGame) {
                         }
                         ctx2.restore();
                     }
+                    else {
+                        // ctx2.fillText(cell.N.toString(), j * itemWidth + 15, i * itemHeight + 30);
+                    }
                 }
                 else {
                     if (cell.InConflict) {
@@ -203,6 +210,10 @@ function Sudo(width, height, canvasGame) {
         {
             this.ctx2.drawImage(cvBuffer, 0, 0);
         }
+        /*else
+        {
+            
+        }*/
     };
 
     // 分段字串
@@ -237,7 +248,7 @@ function Sudo(width, height, canvasGame) {
     this.ProcMouseClick = function (pos) {
         if (this.EditingCellIndex == null) {
             // 非编辑状态进入编辑状态        
-            var index = sudo.getCellIndex(pos);
+            var index = this.getCellIndex(pos);
             if (index.i < 0 || index.i > 8 || index.j < 0 || index.j > 8) {
                 this.EditingCellIndex = null;
                 this.EditPannel = null;
@@ -265,8 +276,8 @@ function Sudo(width, height, canvasGame) {
             }
 
             // 画个版子。
-            this.EditPannel = new EditPannel(pos.x, pos.y, this.ItemWidth / 1.5, nList, this.Width, this.Height);
-            this.EditPannel.Draw(ctx);
+            this.EditPannel = new EditPannel(pos.x, pos.y, this.ItemWidth / 1.5, nList, this.Width, this.Height, this);
+            this.EditPannel.Draw(this.ctx);
         }
         else {
             // 编辑状态选定数字，进入非编辑状态
@@ -334,7 +345,12 @@ function Sudo(width, height, canvasGame) {
                 l[this.Cells[i][j].N - 1] = null;
             }
         }
+
+        // 加上自己
+        //var n = this.Cells[index.i][index.j];
+        //l[n - 1] = n;
         
+
         return l;
     };
 
@@ -469,7 +485,7 @@ function InArray(obj, arr) {
 }
 
 // 编辑板类
-function EditPannel(x, y, ItemWidth, NList, maxWidth, maxHeight) {
+function EditPannel(x, y, ItemWidth, NList, maxWidth, maxHeight, cv) {
     this.ItemWidth = ItemWidth;
     this.X = x;
     this.Y = y;
@@ -478,6 +494,7 @@ function EditPannel(x, y, ItemWidth, NList, maxWidth, maxHeight) {
     this.H = this.ItemWidth * 4;
     this.DrawX = this.X - this.W / 2;
     this.DrawY = this.Y - this.H / 2;
+    this.ctx = cv.CanvasGame.getContext("2d");
 
     if (this.DrawX < 0)
         this.DrawX = 0;
@@ -494,25 +511,25 @@ function EditPannel(x, y, ItemWidth, NList, maxWidth, maxHeight) {
 // 在合适的位置上画一个编辑版
 EditPannel.prototype.Draw = function () {
     // 在合适的位置上画一个编辑版
-    ctx.fillStyle = 'pink';
-    ctx.fillRect(this.DrawX, this.DrawY, this.W, this.H);
-    ctx.strokeStyle = "#000000"; // 设置线的颜色
-    ctx.lineWidth = 2.0; // 设置线宽
-    ctx.strokeRect(this.DrawX, this.DrawY, this.W, this.H);
-    ctx.strokeStyle = "#000000"; // 设置线的颜色
-    ctx.lineWidth = 1.0; // 设置线宽
+    this.ctx.fillStyle = 'pink';
+    this.ctx.fillRect(this.DrawX, this.DrawY, this.W, this.H);
+    this.ctx.strokeStyle = "#000000"; // 设置线的颜色
+    this.ctx.lineWidth = 2.0; // 设置线宽
+    this.ctx.strokeRect(this.DrawX, this.DrawY, this.W, this.H);
+    this.ctx.strokeStyle = "#000000"; // 设置线的颜色
+    this.ctx.lineWidth = 1.0; // 设置线宽
     for (var i = 1; i <= 9; i++) {
         var itemX = this.DrawX + ((i - 1) % 3) * this.ItemWidth;
         var itemY = this.DrawY + Math.floor((i - 1) / 3) * this.ItemWidth;
-        ctx.strokeStyle = "#000000"; // 设置线的颜色
-        ctx.strokeRect(
+        this.ctx.strokeStyle = "#000000"; // 设置线的颜色
+        this.ctx.strokeRect(
             itemX,
             itemY,
             this.ItemWidth, this.ItemWidth);
         if (InArray(i, this.NList)) {
-            ctx.fillStyle = "green"; // 设置线的颜色
-            ctx.font = "Bold " + (this.ItemWidth / 2) + "px Arial";
-            ctx.fillText(i.toString(), itemX + this.ItemWidth / 3, itemY + this.ItemWidth / 1.5);
+            this.ctx.fillStyle = "green"; // 设置线的颜色
+            this.ctx.font = "Bold " + (this.ItemWidth / 2) + "px Arial";
+            this.ctx.fillText(i.toString(), itemX + this.ItemWidth / 3, itemY + this.ItemWidth / 1.5);
         }
     }
 };
@@ -538,6 +555,23 @@ EditPannel.prototype.GetHitNumber = function (x, y) {
     return n;
 };
 
+/*// debug用的
+function allPrpos(obj) {
+    // 用来保存所有的属性名称和值 
+    var props = "";
+    // 开始遍历 
+    for (var p in obj) { // 方法 
+        if (typeof (obj[p]) == "function") {
+            //obj[p]();
+            props += p + " = function() <br /> ";
+        } else { // p 为属性名称，obj[p]为对应属性的值 
+            props += p + " = " + obj[p] + " <br /> ";
+        }
+    } // 最后显示所有的属性 
+    return props;
+}*/
+
+
 // 事件处理。
 function onMouseMove(evt) {
     //    var loc = getPointOnCanvas(evt.target, evt.x, evt.y);
@@ -552,13 +586,13 @@ function onMouseDown(evt) {
 
 function onMouseUp(evt) {
     //evt.PerventDefault();
-    var loc = getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
-    sudo.ProcMouseClick(loc);
+    // var loc = getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
+    // this.ProcMouseClick(loc);
     //var index = sudo.getCellIndex(loc);
 
 }
 
-// 座标转换。请用event.X，Y来转换，不要用PageX,PageY, 不然滚屏时出错误。？
+// 座标转换。请用event.X，Y来转换，不要用PageX,PageY, 不然滚屏时出错误。
 function getPointOnCanvas(canvas, x, y) {
     var bbox = canvas.getBoundingClientRect();
     var x2 = (x - bbox.left) * (canvas.width / bbox.width);
@@ -568,3 +602,5 @@ function getPointOnCanvas(canvas, x, y) {
         y: y2
     };
 }
+
+
