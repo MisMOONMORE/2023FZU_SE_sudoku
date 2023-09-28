@@ -150,7 +150,7 @@ function Sudo(width, height, canvasGame) {
                 var cell = this.Cells[i][j];
                 // 如果是固定格，那么画底纹
                 if (cell.Fixed) {
-                    ctx2.fillStyle = "#dddddd";
+                    ctx2.fillStyle = "#b9edfa";
                     ctx2.fillRect(j * itemWidth, i * itemHeight, itemWidth, itemHeight);                    
                 }
 
