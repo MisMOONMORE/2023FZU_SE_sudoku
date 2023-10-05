@@ -603,4 +603,3 @@ function getPointOnCanvas(canvas, x, y) {
     };
 }
 
-

@@ -88,7 +88,7 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 620px;
+    margin-left: 610px;
     margin-bottom: 20px;
 }
 
@@ -103,7 +103,7 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 800px;
+    margin-left: 770px;
     margin-bottom: 20px;
 
 }
@@ -119,7 +119,23 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 970px;
+    margin-left: 930px;
+    margin-bottom: 20px;
+
+}
+
+#btnSolute{
+    background-color: #007bff;
+    color: #fff;
+    display: block;
+    /* margin: 15px auto; */
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    margin-top: -55px;
+    margin-left: 1090px;
     margin-bottom: 20px;
 
 }
