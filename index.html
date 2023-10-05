@@ -25,6 +25,7 @@
         <button id="btnShowOptNumber" onclick="btnShowOptNumber_Click()">显示提示</button>
         <button id="btnClearAll" onclick="btnClearAll_Click()">全部清除</button>
         <button id="btnEditMode" onclick="btnEditMode_Click()">编辑数独</button>
+        <button id="btnSolute" onclick="btnSolute_Click()">求解数独</button>
     </div>
     <table>
         <tbody>
@@ -71,7 +72,16 @@
     var sudos = []; 
     var seleLevels = document.getElementById("seleLevel");
 
-    for(let i = 0; i < cavanssudos.length; i ++) {
+    async function generatesudo(){
+        let works=[];
+        for(let i = 0; i < cavanssudos.length; i ++) {
+            works.push(generate(i));
+    }
+        let results = await Promise.all(works);
+        return results;
+    }
+    
+    function generate(i){
         var cavanssudo = cavanssudos[i];
         let ctx = cavanssudo.getContext("2d");
         var sudowidth = 425;    
@@ -88,6 +98,8 @@
 
         sudos.push(sudo)
     }
+    
+    
     function btnInitSudo_Click() {
         if (confirm("确认新开一局？")) {
             var seleLevel = document.getElementById("seleLevel");
@@ -137,6 +149,7 @@
             sudos[i].setUseBuffer(ipt.checked);
         }
     }
+    generatesudo();
 
     //getInfo();  
 
