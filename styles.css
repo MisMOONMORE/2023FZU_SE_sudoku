@@ -38,11 +38,11 @@ body{
     margin-top: 10px;
 }
 
-#chkUseBuffer{
+/* #chkUseBuffer{
     color: #007bff;
     margin-left:180px;
 
-}
+} */
 
 #seleLevel{
     background-color: #ffffff;
@@ -54,7 +54,7 @@ body{
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-left: 300px; 
+    margin-left: 250px; 
     margin-top: -20px;
     margin-bottom: 20px;
 
@@ -71,7 +71,7 @@ body{
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-left: 450px; 
+    margin-left: 420px; 
     margin-top: -55px;
     margin-bottom: 20px;
 }

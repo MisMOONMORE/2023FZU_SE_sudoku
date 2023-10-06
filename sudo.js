@@ -588,6 +588,7 @@ function onMouseUp(evt) {
     //evt.PerventDefault();
     // var loc = getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
     // this.ProcMouseClick(loc);
+    
     //var index = sudo.getCellIndex(loc);
 
 }
