@@ -14,8 +14,9 @@
 <body>
     <h1 id="sdyx" align="center">数独游戏</h1>
     <div class="tool">
-        <input type="checkbox" id='chkUseBuffer' checked="checked" onclick='btnUseBuffer_Click()'></input>双缓冲
-        难度：<select id="seleLevel">
+        <!-- <input type="checkbox" id='chkUseBuffer' checked="checked" onclick='btnUseBuffer_Click()'></input>双缓冲 -->
+        <div style="text-indent:12em;">难度：</div>
+        <select id="seleLevel">
             <option value="2">容易</option>
             <option value="3" selected="selected">一般</option>
             <option value="4">较难</option>
@@ -31,36 +32,36 @@
         <tbody>
         <tr>
             <td>
-                <canvas id="c1" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c1" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
 
             <td>
-                <canvas id="c2" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c2" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
             <td>
-                <canvas id="c3" class="canvassudo" width="400" height="400"></canvas><br>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <canvas id="c4" class="canvassudo" width="400" height="400"></canvas><br>
-            </td>
-            <td>
-                <canvas id="c5" class="canvassudo" width="400" height="400"></canvas><br>
-            </td>
-            <td>
-                <canvas id="c6" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c3" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
         </tr>
         <tr>
             <td>
-                <canvas id="c7" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c4" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
             <td>
-                <canvas id="c8" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c5" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
             <td>
-                <canvas id="c9" class="canvassudo" width="400" height="400"></canvas><br>
+                <canvas id="c6" class="canvassudo" width="425" height="425"></canvas><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <canvas id="c7" class="canvassudo" width="425" height="425"></canvas><br>
+            </td>
+            <td>
+                <canvas id="c8" class="canvassudo" width="425" height="425"></canvas><br>
+            </td>
+            <td>
+                <canvas id="c9" class="canvassudo" width="425" height="425"></canvas><br>
             </td>
         </tr>
     </tbody></table>
@@ -81,6 +82,7 @@
         return results;
     }
     
+    
     function generate(i){
         var cavanssudo = cavanssudos[i];
         let ctx = cavanssudo.getContext("2d");
@@ -93,7 +95,6 @@
         cavanssudo.height = sudoheight * window.devicePixelRatio;
         let sudo = new Sudo(cavanssudo.width, cavanssudo.height, cavanssudo);
         sudo.Init(seleLevel.value);
-        btnUseBuffer_Click();
         sudo.Draw();
 
         sudos.push(sudo)
@@ -103,10 +104,7 @@
     function btnInitSudo_Click() {
         if (confirm("确认新开一局？")) {
             var seleLevel = document.getElementById("seleLevel");
-            for(let i = 0; i < sudos.length; i ++) {
-                sudos[i].Init(seleLevel.value);
-                sudos[i].Draw();
-            }
+            generatesudo();
         }
     }
 
@@ -142,13 +140,7 @@
             }
         }
     }
-    function btnUseBuffer_Click()
-    {
-        var ipt = document.getElementById("chkUseBuffer");
-        for(let i = 0; i < sudos.length; i ++) {
-            sudos[i].setUseBuffer(ipt.checked);
-        }
-    }
+    
     generatesudo();
 
     //getInfo();  
