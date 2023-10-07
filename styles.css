@@ -40,7 +40,7 @@ body{
 
 #chkUseBuffer{
     color: #007bff;
-    margin-left:180px;
+    margin-left:150px;
 
 }
 
@@ -54,9 +54,10 @@ body{
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-left: 300px; 
-    margin-top: -15px;
+    margin-left: 270px; 
+    margin-top: -20px;
     margin-bottom: 20px;
+    
 
 }
 
@@ -71,7 +72,7 @@ body{
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-left: 450px; 
+    margin-left: 420px; 
     margin-top: -55px;
     margin-bottom: 20px;
 }
@@ -88,7 +89,7 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 620px;
+    margin-left: 590px;
     margin-bottom: 20px;
 }
 
@@ -103,7 +104,7 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 800px;
+    margin-left: 760px;
     margin-bottom: 20px;
 
 }
@@ -119,8 +120,8 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 970px;
-    margin-bottom: 20px;
+    margin-left: 930px;
+    margin-bottom:20px;
 
 }
 
@@ -135,7 +136,7 @@ body{
     border: none;
     cursor: pointer;
     margin-top: -55px;
-    margin-left: 1090px;
+    margin-left: 1100px;
     margin-bottom: 20px;
 
 }
