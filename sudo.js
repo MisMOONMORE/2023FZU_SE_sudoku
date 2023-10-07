@@ -4,6 +4,7 @@ function Cell(n) {
     this.Fixed = true; // 是否是固定的数字格？ 
     this.OptNumbes = null; // 可填数字
     this.InConflict = false;  // 是否此格与其他格有冲突
+    this.ans=0;
 }
 
 
@@ -28,7 +29,6 @@ function Sudo(width, height, canvasGame) {
     this.bUseBuffer = true;
     this.EditingCellIndex = null; // 正在编辑状态的格子索引
     this.EditPannel = null; // 正在编辑状态时，指向编辑板实例。不在编辑状态时，指向null;
-    
     // double buffer
     this.ctx2 = this.CanvasGame.getContext("2d");
     
@@ -57,6 +57,14 @@ function Sudo(width, height, canvasGame) {
             var i2 = Math.floor(Math.random() * (9 - i - 1)) + i;
             var n2 = this.Cells[0][i2].N;
             this.swapSudoNumber(n1, n2);
+        }
+
+        for (var i = 0; i < 9; i++) {
+            for(var j = 0; j < 9; j++)
+            {
+                var num = this.Cells[i][j].N;
+                this.Cells[i][j].ans = num;
+            }
         }
 
         // 开始随机删除数字
@@ -472,6 +480,19 @@ function Sudo(width, height, canvasGame) {
         this.CheckAllConflict();
         this.EditPannel = null;
         this.EditingCellIndex = null;
+    };
+
+    this.ShowAnswer = function ()
+    {
+        // this.ClearAll();
+        for(var i = 0; i < 9; i++)
+        {
+            for(var j = 0; j < 9; j++)
+            {
+                this.Cells[i][j].N = this.Cells[i][j].ans;
+            }
+        }
+
     };
 }
 
