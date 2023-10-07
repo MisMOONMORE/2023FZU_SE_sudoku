@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>数独游戏</title>
     <link rel="stylesheet" href="styles.css">
@@ -6,7 +6,7 @@
     <link rel="shortcut icon" href="sudo.ico" type="image/x-icon" />
     <style>
         #canvassudo {
-        border:1px solid rgb(0, 0, 0);
+        border:1px solid black;
         width:400px;height:400px;
         }
     </style>
@@ -14,153 +14,161 @@
 <body>
     <h1 id="sdyx" align="center">数独游戏</h1>
     <div class="tool">
-        <!-- <input type="checkbox" id='chkUseBuffer' checked="checked" onclick='btnUseBuffer_Click()'></input>双缓冲 -->
-        <div style="text-indent:12em;">难度：</div>
-        <select id="seleLevel">
+        <input type="checkbox" id='chkUseBuffer' checked="checked" onclick='btnUseBuffer_Click()'></input>双缓冲
+        难度：<select id="seleLevel">
             <option value="2">容易</option>
             <option value="3" selected="selected">一般</option>
             <option value="4">较难</option>
             <option value="5">困难</option>
         </select>
-        <button id="btnInitSudo" onclick="btnInitSudo_Click()">生成新数独</button>
-        <button id="btnShowOptNumber" onclick="btnShowOptNumber_Click()">显示提示</button>
-        <button id="btnClearAll" onclick="btnClearAll_Click()">全部清除</button>
-        <button id="btnEditMode" onclick="btnEditMode_Click()">编辑数独</button>
-        <button id="btnSolve" onclick="btnSolve_Click()">求解数独</button>
+        <button id="btnInitSudo">生成新数独</button>
+        <button id="btnEditMode">编辑数独</button>
+        <button id="btnShowOptNumber">显示提示</button>
+        <button id="btnClearAll">全部清除</button>
+        <button id="btnAnswer">显示答案</button>
+
     </div>
     <table>
         <tbody>
         <tr>
             <td>
-                <canvas id="c1" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c1" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
 
             <td>
-                <canvas id="c2" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c2" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
             <td>
-                <canvas id="c3" class="canvassudo" width="425" height="425"></canvas><br>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <canvas id="c4" class="canvassudo" width="425" height="425"></canvas><br>
-            </td>
-            <td>
-                <canvas id="c5" class="canvassudo" width="425" height="425"></canvas><br>
-            </td>
-            <td>
-                <canvas id="c6" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c3" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
         </tr>
         <tr>
             <td>
-                <canvas id="c7" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c4" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
             <td>
-                <canvas id="c8" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c5" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
             <td>
-                <canvas id="c9" class="canvassudo" width="425" height="425"></canvas><br>
+                <canvas id="c6" class="canvassudo" width="400" height="400"></canvas><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <canvas id="c7" class="canvassudo" width="400" height="400"></canvas><br>
+            </td>
+            <td>
+                <canvas id="c8" class="canvassudo" width="400" height="400"></canvas><br>
+            </td>
+            <td>
+                <canvas id="c9" class="canvassudo" width="400" height="400"></canvas><br>
             </td>
         </tr>
     </tbody></table>
+    
     
 
     <script src="sudo.js"></script>
     <script>
     var cavanssudos = document.getElementsByClassName("canvassudo");
-    var sudos = []; 
-    var seleLevels = document.getElementById("seleLevel");
-
-    async function generatesudo(){
-        let works=[];
-        for(let i = 0; i < cavanssudos.length; i ++) {
-            works.push(generate(i));
-    }
-        let results = await Promise.all(works);
-        return results;
-    }
+    var ipt = document.getElementById("chkUseBuffer");
+    var btnShowOptNumber = document.getElementById("btnShowOptNumber");
+    var btnInitSudo = document.getElementById("btnInitSudo");
+    var btnEditMode = document.getElementById("btnEditMode");
+    var btnClearAll = document.getElementById("btnClearAll");
+    var seleLevel = document.getElementById("seleLevel");
+    var btnAnswer = document.getElementById("btnAnswer");
     
-    
-    function generate(i){
-        var cavanssudo = cavanssudos[i];
-        let ctx = cavanssudo.getContext("2d");
-        var sudowidth = 425;    
-        var sudoheight = 425;
-    
-        cavanssudo.style.width = sudowidth + "px";
-        cavanssudo.style.height = sudoheight + "px";
-        cavanssudo.width = sudowidth *  window.devicePixelRatio;
-        cavanssudo.height = sudoheight * window.devicePixelRatio;
-        let sudo = new Sudo(cavanssudo.width, cavanssudo.height, cavanssudo);
-        sudo.Init(seleLevel.value);
-        sudo.Draw();
-
-        sudos.push(sudo)
+    function generateSudos() {
+        var sudos = [];
+        return new Promise((resolve, reject) => {
+            let count = 0;
+            let i = 0;
+            let length = cavanssudos.length;
+            function generateSudo() {
+                let cavanssudo = cavanssudos[i];
+                let ctx = cavanssudo.getContext("2d");
+                let sudowidth = 400;
+                let sudoheight = 400;
+                cavanssudo.style.width = sudowidth + "px";
+                cavanssudo.style.height = sudoheight + "px";
+                cavanssudo.width = sudowidth * window.devicePixelRatio;
+                cavanssudo.height = sudoheight *window.devicePixelRatio;
+                let sudo = new Sudo(cavanssudo.width, cavanssudo.height, cavanssudo);
+                sudo.Init(seleLevel.value);
+                for(let i = 0; i < sudos.length; i ++) {
+                    sudos[i].setUseBuffer(ipt.checked);
+                }
+                sudo.Draw();
+                sudos.push(sudo);
+                i++;
+                if (i < length) {
+                  setTimeout(generateSudo, 0);
+                } else {
+                  resolve(sudos);
+                }
+            }
+        generateSudo();
+     });
     }
-    
-    
-    function btnInitSudo_Click() {
-        if (confirm("确认新开一局？")) {
-            var seleLevel = document.getElementById("seleLevel");
-            generatesudo();
-        }
-    }
+    generateSudos().then((sudos) => {
+        
+        btnInitSudo.addEventListener('click', () => {
+            if (confirm("确认新开一局？")) {
+                location.reload()  
+            }
+        }, false)
 
-    function btnShowOptNumber_Click() {
-        var btn = document.getElementById("btnShowOptNumber");
-        for(let i = 0; i < sudos.length; i ++) {
-            var showopt = sudos[i].ToggleShowOptionNumber();
-            if (showopt)
-                btn.innerText = "隐藏提示";
-            else
-                btn.innerText = "显示提示";
-            sudos[i].Draw();
-        }
-    }
-
-    function btnEditMode_Click() {
-        var btn = document.getElementById("btnEditMode");
-        for(let i = 0; i < sudos.length; i ++) {
-            var editmode = sudos[i].ToggleEditMode();
-            if (editmode)
-                btn.innerText = "结束编辑";
-            else
-                btn.innerText = "编辑模式";
-            sudos[i].Draw();
-        }
-    }
-
-    function btnClearAll_Click() {
-        if (confirm("确认清除所有自填数字？")) {
+        btnShowOptNumber.addEventListener('click', () => {
             for(let i = 0; i < sudos.length; i ++) {
-                sudos[i].ClearAll();
+                var showopt = sudos[i].ToggleShowOptionNumber();
+                if (showopt)
+                    btnShowOptNumber.innerText = "隐藏提示";
+                else
+                    btnShowOptNumber.innerText = "显示提示";
                 sudos[i].Draw();
             }
-        }
-    }
-    
-    function Solve(i)
-    {
-        sudos[i].ShowAnswer();
-        sudos[i].Draw();
-    }
-    
-    async function btnSolve_Click() {
-        let works=[];
-        if (confirm("确认求解数独？")) {
+        }, false)
+
+        btnEditMode.addEventListener('click', () => {
             for(let i = 0; i < sudos.length; i ++) {
-                works.push(Solve(i));
+                var editmode = sudos[i].ToggleEditMode();
+                if (editmode)
+                    btnEditMode.innerText = "结束编辑";
+                else
+                    btnEditMode.innerText = "编辑模式";
+                sudos[i].Draw();
             }
-            let results = await Promise.all(works);
-            return results;
-        }
-    }
-    generatesudo();
+        }, false)
 
-    //getInfo();  
+        btnClearAll.addEventListener('click', () => {
+            if(confirm("确认清除所有数字？")) {
+                for(let i = 0; i < sudos.length; i ++) {
+                    sudos[i].ClearAll();
+                    sudos[i].Draw();
+                }
+            }
+        }, false)
+        ipt.addEventListener('click', () => {
+            for(let i = 0; i < sudos.length; i ++) {
+                sudos[i].setUseBuffer(ipt.checked);
+            }
+        }, false)
+        btnAnswer.addEventListener('click', () => {
+            
+            for(let i = 0; i < sudos.length; i ++) {
+                var showAnswer = sudos[i].ShowAnswer;
+                if (showAnswer)
+                    btnAnswer.innerText = "隐藏答案";
+                else
+                    btnAnswer.innerText = "显示答案";
+                sudos[i].ToggleShowAnswer();
+                sudos[i].Draw();
+            }
+        }, false)
 
+        
+    })
     </script>
 </body>
 </html>
