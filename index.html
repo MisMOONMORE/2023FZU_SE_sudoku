@@ -26,7 +26,7 @@
         <button id="btnShowOptNumber" onclick="btnShowOptNumber_Click()">显示提示</button>
         <button id="btnClearAll" onclick="btnClearAll_Click()">全部清除</button>
         <button id="btnEditMode" onclick="btnEditMode_Click()">编辑数独</button>
-        <button id="btnSolute" onclick="btnSolute_Click()">求解数独</button>
+        <button id="btnSolve" onclick="btnSolve_Click()">求解数独</button>
     </div>
     <table>
         <tbody>
@@ -141,6 +141,22 @@
         }
     }
     
+    function Solve(i)
+    {
+        sudos[i].ShowAnswer();
+        sudos[i].Draw();
+    }
+    
+    async function btnSolve_Click() {
+        let works=[];
+        if (confirm("确认求解数独？")) {
+            for(let i = 0; i < sudos.length; i ++) {
+                works.push(Solve(i));
+            }
+            let results = await Promise.all(works);
+            return results;
+        }
+    }
     generatesudo();
 
     //getInfo();  
